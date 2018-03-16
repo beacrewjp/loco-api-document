@@ -1,0 +1,10 @@
+{
+  "name": "loco-api-document",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-aglio": "^0.0.10"
+  }
+}
