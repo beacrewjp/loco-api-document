@@ -20,7 +20,7 @@ Code | Message                 | Payload
  200 | OK                      | *Response data
  400 | Request invalid         | *Validation error messages
  401 | Secret invalid          | []
- 500 | Internal Server Error   | []
+ 500 | Internal server error   | []
 
 ## HTTP Response Structure
 The following is the template of the response of each endpoint.
@@ -57,7 +57,11 @@ Group description
         + Default: `100`
     + page: `1` (integer, optional) - Specify pages
         + Default: `1`
-    + devide_id: `e996cb50-ffb1-4f5c-ade5-d111dcaba4b0` (string, optional) - Search for logs by the field
+    + suffix: `.development` (string, optional) - Search for logs by the suffiex of bundle id each environments *<code>all</code> returns the log of all environments
+    + device_id: `e996cb50-ffb1-4f5c-ade5-d111dcaba4b0` (array, optional) - Search for logs by the field
+    + beacon_id: `a004860f-767c-4388-b9d8-76b321a323e7` (string, optional) - Search for logs by the field
+    + rssi_gt: `-255` (integer, optional) - Greater than or equal to **rssi**
+    + rssi_lt: `0` (integer, optional) - Less than or equal to **rssi**
     + detected_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **detected**
     + detected_lt: `2018-03-25 00:00:00` (date, optional) - Less than or equal to **detected**
     + arrived_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **arrived**
@@ -101,7 +105,11 @@ Group description
         + Default: `100`
     + page: `1` (integer, optional) - Specify pages
         + Default: `1`
-    + devide_id: `e996cb50-ffb1-4f5c-ade5-d111dcaba4b0` (string, optional) - Search for logs by the field
+    + suffix: `.development` (string, optional) - Search for logs by the suffiex of bundle id each environments *<code>all</code> returns the log of all environments
+    + device_id: `e996cb50-ffb1-4f5c-ade5-d111dcaba4b0` (array, optional) - Search for logs by the field
+    + beacon_id: `a004860f-767c-4388-b9d8-76b321a323e7` (string, optional) - Search for logs by the field
+    + battery_gt: `0` (integer, optional) - Greater than or equal to **battery**
+    + battery_lt: `100` (integer, optional) - Less than or equal to **battery**
     + detected_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **detected**
     + detected_lt: `2018-03-25 00:00:00` (date, optional) - Less than or equal to **detected**
     + arrived_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **arrived**
@@ -145,7 +153,10 @@ Group description
         + Default: `100`
     + page: `1` (integer, optional) - Specify pages
         + Default: `1`
-    + devide_id: `e996cb50-ffb1-4f5c-ade5-d111dcaba4b0` (string, optional) - Search for logs by the field
+    + suffix: `.development` (string, optional) - Search for logs by the suffiex of bundle id each environments *<code>all</code> returns the log of all environments
+    + device_id: `e996cb50-ffb1-4f5c-ade5-d111dcaba4b0` (array, optional) - Search for logs by the field
+    + event_key: `Key` (string, optional) - Search for logs by the field (Partial match)
+    + event_value: `Value` (string, optional) - Search for logs by the field (Partial match)
     + detected_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **detected**
     + detected_lt: `2018-03-25 00:00:00` (date, optional) - Less than or equal to **detected**
     + arrived_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **arrived**
@@ -189,7 +200,10 @@ Group description
         + Default: `100`
     + page: `1` (integer, optional) - Specify pages
         + Default: `1`
-    + devide_id: `e996cb50-ffb1-4f5c-ade5-d111dcaba4b0` (string, optional) - Search for logs by the field
+    + suffix: `.development` (string, optional) - Search for logs by the suffiex of bundle id each environments *<code>all</code> returns the log of all environments
+    + device_id: `e996cb50-ffb1-4f5c-ade5-d111dcaba4b0` (array, optional) - Search for logs by the field
+    + region_id: `0df3ccce-c2ba-44f8-b252-f4775bbdc4d2` (string, optional) - Search for logs by the field
+    + in_out: `true` (boolean, optional) - true: Region in / false: Region out
     + detected_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **detected**
     + detected_lt: `2018-03-25 00:00:00` (date, optional) - Less than or equal to **detected**
     + arrived_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **arrived**
@@ -233,7 +247,14 @@ Group description
         + Default: `100`
     + page: `1` (integer, optional) - Specify pages
         + Default: `1`
-    + devide_id: `e996cb50-ffb1-4f5c-ade5-d111dcaba4b0` (string, optional) - Search for logs by the field
+    + suffix: `.development` (string, optional) - Search for logs by the suffiex of bundle id each environments *<code>all</code> is to get the log of all environments
+    + device_id: `e996cb50-ffb1-4f5c-ade5-d111dcaba4b0` (array, optional) - Search for logs by the field
+    + os_type: `iOS` (string, optional) - Search for logs by the field (Partial match)
+    + os_version: `11.` (string, optional) - Search for logs by the field (Partial match)
+    + sdk_version: `2.` (string, optional) - Search for logs by the field (Partial match)
+    + model: `iPhone` (string, optional) - Search for logs by the field (Partial match)
+    + bluetooth: `true` (boolean, optional) - true: ON false: OFF
+    + location: `true` (boolean, optional) - true: ON false: OFF
     + detected_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **detected**
     + detected_lt: `2018-03-25 00:00:00` (date, optional) - Less than or equal to **detected**
     + arrived_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **arrived**
