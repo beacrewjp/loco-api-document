@@ -288,3 +288,438 @@ Get device logs
                 }
                 ...
             ]
+
+
+
+# Group Actions
+Group description
+
+## Get Actions [/actions]
+
++ Parameters
+
+    + per_page: `1000` (integer, optional) - Set a custom page size up to 1000
+        + Default: `100`
+    + page: `1` (integer, optional) - Specify pages
+        + Default: `1`
+    + id: `e996cb50-ffb1-4f5c-ade5-d111dcaba4b0` (array, optional) - Search for actions by the field
+    + name: `demoAction` (string, optional) - Action name (Partial match)
+    + interval: `60` (integer, optional) - Action interval (Partial match)
+    + uri: `beacrew.jp` (string, optional) - URI (Partial match)
+    + enabled: `true` (bool, optional) - Status
+    + created_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **created**
+    + created_lt: `2018-03-25 00:00:00` (date, optional) - Less than or equal to **created**
+    + updated_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **updated**
+    + updated_lt: `2018-03-25 00:00:00` (date, optional) - Less than or equal to **updated**
+    + sort: `desc` (string, optional) - Sort in ascending order or descending order by **created**
+        + Default: `desc`
+        + Members
+            + `asc`
+            + `desc`
+
+### Get Actions [GET]
+Get actions
+
++ Response 200 (application/json)
+
+    + Body
+    
+        {
+            "code": 200,
+            "message": "OK",
+            "payload": {
+                "total": 200,
+                "per_page": 100,
+                "current_page": 1,
+                "last_page": 2,
+                "next_page_url": "https://api.bc-loco.jp/api/actions?page=2",
+                "prev_page_url": null,
+                "from": 1,
+                "to": 100,
+                "data": [
+                    {
+                        "id": "acafd1d5-9322-4a37-873a-f1952f939eca",
+                        "name": "demoAction",
+                        "interval": 60,
+                        "uri": "https://www.demoaction.com",
+                        "params": [
+                            {
+                                "key": "key01",
+                                "val": "val01"
+                            }
+                        ],
+                        "enabled": true,
+                        "created": "2017-01-01 00:00:00",
+                        "updated": "2017-01-01 00:00:00"
+        	        }
+        	        ...
+                ]
+            }
+        }
+ 
+## Get Action by id [/actions/:id]
+
+### Get Action by id [GET]
+Get Action by specified id
+
++ Response 200 (application/json)
+
+    + Body
+
+        {
+            "code": 200,
+            "message": "OK",
+            "payload": {
+                "id": "acafd1d5-9322-4a37-873a-f1952f939eca",
+                "name": "demoAction",
+                "interval": 60,
+                "uri": "https://www.demoaction.com",
+                "params": [
+                    {
+                        "key": "key01",
+                        "val": "val01"
+                    }
+                ],
+                "enabled": true,
+                "created": "2017-01-01 00:00:00",
+                "updated": "2017-01-01 00:00:00"
+            }
+        }    
+
+
+
+# Group Beacons
+Group description
+
+## Get Beacons [/beacons]
+
++ Parameters
+
+    + per_page: `1000` (integer, optional) - Set a custom page size up to 1000
+        + Default: `100`
+    + page: `1` (integer, optional) - Specify pages
+        + Default: `1`
+    + id: `e996cb50-ffb1-4f5c-ade5-d111dcaba4b0` (array, optional) - Search for beacons by the field
+    + name: `demoBeacon` (string, optional) - Beacon name (Partial match)
+    + local_name: `demoBeacon` (string, optional) - Local name (Partial match)
+    + uuid: `b80e08cd-091f-44a7-9ada-d6bc9899a0cf` (string, optional) - uuid
+    + major: `62665` (integer, optional) - Major
+    + minor: `62665` (integer, optional) - Minor
+    + action_id: `acafd1d5-9322-4a37-873a-f1952f939eca` (string, optional) - Action id
+    + tx_power: `-77` (integer, optional) - TxPower
+    + battery_gt: `30` (integer, optional) - Greater than or equal to **battery**
+    + battery_lt: `70` (integer, optional) - Less than or equal to **battery**
+    + module_id: `Xkrv` (string, optional) - Module id
+    + manufacturer: `Kontakt` (string, optional) - Manufacturer
+    + model: `Standard` (string, optional) - Model
+    + note: `demo` (string, optional) - Note (Partial match)
+    + x: `339` (integer, optional) - X position
+    + y: `146` (integer, optional) - Y position
+    + h: `1` (integer, optional) - Height
+    + enabled: `true` (bool, optional) - Status
+    + created_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **created**
+    + created_lt: `2018-03-25 00:00:00` (date, optional) - Less than or equal to **created**
+    + updated_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **updated**
+    + updated_lt: `2018-03-25 00:00:00` (date, optional) - Less than or equal to **updated**
+    + sort: `desc` (string, optional) - Sort in ascending order or descending order by **created**
+        + Default: `desc`
+        + Members
+            + `asc`
+            + `desc`
+
+### Get Beacons [GET]
+Get Beacons
+
++ Response 200 (application/json)
+
+    + Body
+
+        {
+            "code": 200,
+            "message": "OK",
+            "payload": {
+                "total": 200,
+                "per_page": 100,
+                "current_page": 1,
+                "last_page": 2,
+                "next_page_url": "https://api.bc-loco.jp/api/beacons?page=2",
+                "prev_page_url": null,
+                "from": 1,
+                "to": 100,
+                "data": [
+                    {
+                        "id": "b80e08cd-091f-44a7-9ada-d6bc9899a0cf",
+                        "name": "demoBeacon",
+                        "local_name": "demoBeacon",
+                        "uuid": "b80e08cd-091f-44a7-9ada-d6bc9899a0cf",
+                        "major": 62665,
+                        "minor": 62665,
+                        "action_id": "b2ea762c-ffda-43f7-b0cd-c0fa9a0c7f6e",
+                        "tx_power": -77,
+                        "battery": 100,
+                        "module_id": "Xkrv",
+                        "manufacturer": "Kontakt",
+                        "model": "Standard",
+                        "note": "demo",
+                        "x": 339,
+                        "y": 146,
+                        "h": 1,
+                        "enabled": true,
+                        "created": "2017-01-01 00:00:00",
+                        "updated": "2017-01-01 00:00:00"
+                    }
+                    ...
+                ]
+            }
+        }
+
+## Get Beacon by id [/beacons/:id]
+
+### Get Beacon by id [GET]
+Get beacon by specified id
+
++ Response 200 (application/json)
+
+    + Body
+
+            [
+                {
+                    "id": "b80e08cd-091f-44a7-9ada-d6bc9899a0cf",
+                    "name": "demoBeacon",
+                    "local_name": "demoBeacon",
+                    "uuid": "b80e08cd-091f-44a7-9ada-d6bc9899a0cf",
+                    "major": 62665,
+                    "minor": 62665,
+                    "action_id": "b2ea762c-ffda-43f7-b0cd-c0fa9a0c7f6e",
+                    "tx_power": -77,
+                    "battery": 100,
+                    "module_id": "Xkrv",
+                    "manufacturer": "Kontakt",
+                    "model": "Standard",
+                    "note": "demo",
+                    "x": 339,
+                    "y": 146,
+                    "h": 1,
+                    "enabled": true,
+                    "created": "2017-01-01 00:00:00",
+                    "updated": "2017-01-01 00:00:00"
+                }
+                ...
+            ]
+
+      
+
+# Group Clusters
+Group description
+
+## Get Clusters [/clusters]
+
++ Parameters
+
+    + per_page: `1000` (integer, optional) - Set a custom page size up to 1000
+        + Default: `100`
+    + page: `1` (integer, optional) - Specify pages
+        + Default: `1`
+    + id: `7028fb82-b551-4828-a90e-7db58f2f6902` (array, optional) - Search for clusters by the field
+    + name: `demoCluster` (string, optional) - Cluster name (Partial match)
+    + parent_id: `b80e08cd-091f-44a7-9ada-d6bc9899a0cf` (string, optional) - Parent Cluster id
+    + tag: `Facility` (string, optional) - Tag
+    + image: `https://aaa.bbb.ccc/demoMap.jpg` (string, optional) - Image file URL
+    + cm_per_pixel: `3.56` (integer, optional) - cm per pixel
+    + att_coef: `2.0` (integer, optional) - att coef
+    + enabled: `true` (bool, optional) - Status
+    + created_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **created**
+    + created_lt: `2018-03-25 00:00:00` (date, optional) - Less than or equal to **created**
+    + updated_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **updated**
+    + updated_lt: `2018-03-25 00:00:00` (date, optional) - Less than or equal to **updated**
+    + sort: `desc` (string, optional) - Sort in ascending order or descending order by **created**
+        + Default: `desc`
+        + Members
+            + `asc`
+            + `desc`
+
+## Get Clusters [GET]
+Get Clusters
+
++ Response 200 (application/json)
+
+    + Body
+
+        {
+            "code": 200,
+            "message": "OK",
+            "payload": {
+                "total": 200,
+                "per_page": 100,
+                "current_page": 1,
+                "last_page": 2,
+                "next_page_url": "https://api.bc-loco.jp/api/clusters?page=2",
+                "prev_page_url": null,
+                "from": 1,
+                "to": 100,
+                "data": [
+                    {
+                        "id": "7028fb82-b551-4828-a90e-7db58f2f6902",
+                        "name": "demoCluster",
+                        "image": null,
+                        "cm_per_pixel": 3.56,
+                        "att_coef": 2.0,      
+                        "tag": "Facility",
+                        "parent_id": null,
+                        "beacons": [
+                            {
+                                "id": "acafd1d5-9322-4a37-873a-f1952f939eca"
+                            }
+                        ],
+                        "enabled": true,
+                        "created": "2017-01-01 00:00:00",
+                        "updated": "2017-01-01 00:00:00"
+                    }
+                    ...
+                ]
+            }
+        }
+
+## Get Cluster by id [/clusters/:id]
+### Get Cluster by id [GET]
+Get Cluster by specified id
+
++ Response 200 (application/json)
+
+    + Body
+
+        {
+            "code": 200,
+            "message": "OK",
+            "payload": {
+                "id": "7028fb82-b551-4828-a90e-7db58f2f6902",
+                "name": "demoCluster",
+                "image": null,
+                "cm_per_pixel": 3.56,
+                "att_coef": 2.0,       
+                "tag": "Facility",
+                "parent_id": null,
+                "beacons": [
+                    {
+                        "id": "acafd1d5-9322-4a37-873a-f1952f939eca"
+                    }
+                ],
+                "enabled": true,
+                "created": "2017-01-01 00:00:00",
+                "updated": "2017-01-01 00:00:00"
+            }
+        }
+
+
+
+# Group Regions
+Group description
+
+## Get Regions [/regions]
+
++ Parameters
+
+    + per_page: `1000` (integer, optional) - Set a custom page size up to 1000
+        + Default: `100`
+    + page: `1` (integer, optional) - Specify pages
+        + Default: `1`
+    + id: `e996cb50-ffb1-4f5c-ade5-d111dcaba4b0` (array, optional) - Search for regions by the field
+    + name: `demoRegion` (string, optional) - Region name (Partial match)
+    + type: `Beacon` (string, optional) - Type ("Beacon" or "Geofence")
+    + uuid: `b80e08cd-091f-44a7-9ada-d6bc9899a0cf` (string, optional) - uuid
+    + major: `62665` (number, optional) - Major
+    + minor: `62665` (number, optional) - Minor
+    + latiitude: `35.658095` (number, optional) - Latitude
+    + longitude: `139.701127` (number, optional) - Longitude
+    + radius: `2000` (number, optional) - Radius
+    + in: `5b56215c-a720-4e54-b3d8-de60f52d2d28` (string, optional) - Region in action id
+    + out: `5b56215c-a720-4e54-b3d8-de60f52d2d28` (string, optional) - Region out action id
+    + enabled: `true` (bool, optional) - Status
+    + created_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **created**
+    + created_lt: `2018-03-25 00:00:00` (date, optional) - Less than or equal to **created**
+    + updated_gt: `2018-03-20 00:00:00` (date, optional) - Greater than or equal to **updated**
+    + updated_lt: `2018-03-25 00:00:00` (date, optional) - Less than or equal to **updated**
+    + sort: `desc` (string, optional) - Sort in ascending order or descending order by **created**
+        + Default: `desc`
+        + Members
+            + `asc`
+            + `desc`
+
+### Get Regions [GET]
+Get Regions
+
++ Response 200 (application/json)
+
+    + Body
+    
+        {
+            "code": 200,
+            "message": "OK",
+            "payload": {
+                "total": 200,
+                "per_page": 100,
+                "current_page": 1,
+                "last_page": 2,
+                "next_page_url": "https://api.bc-loco.jp/api/regions?page=2",
+                "prev_page_url": null,
+                "from": 1,
+                "to": 100,
+                "data": [
+                    {
+                        "id": "acafd1d5-9322-4a37-873a-f1952f939eca",
+                        "name": "demoRegion",
+                        "type": "Beacon",
+                        "uuid": "b80e08cd-091f-44a7-9ada-d6bc9899a0cf",
+                        "major": 62665,
+                        "minor": 62665,
+                        "in": "5b56215c-a720-4e54-b3d8-de60f52d2d28",
+                        "out": "5b56215c-a720-4e54-b3d8-de60f52d2d28",                
+                        "enabled": true,
+                        "created": "2017-01-01 00:00:00",
+                        "updated": "2017-01-01 00:00:00"
+                    },
+                    {
+                        "id": "acafd1d5-9322-4a37-873a-f1952f939eca",
+                        "name": "demoRegion",
+                        "type": "Geofence",
+                        "longitude": 139.701127,
+                        "latitude": 35.658095,
+                        "radius": 2000,
+                        "in": "5b56215c-a720-4e54-b3d8-de60f52d2d28",
+                        "out": "5b56215c-a720-4e54-b3d8-de60f52d2d28",                   
+                        "enabled": true,
+                        "created": "2017-01-01 00:00:00",
+                        "updated": "2017-01-01 00:00:00"
+                    }
+                    ...
+                ]
+            }
+        }
+
+## Get Region by id [/regions/:id]
+
+### Get Region by id [GET]
+Get Region by specified id
+
++ Response 200 (application/json)
+
+    + Body
+
+        {
+            "code": 200,
+            "message": "OK",
+            "payload": {
+                "id": "acafd1d5-9322-4a37-873a-f1952f939eca",
+                "name": "demoRegion",
+                "type": "Beacon",
+                "uuid": "b80e08cd-091f-44a7-9ada-d6bc9899a0cf",
+                "major": 62665,
+                "minor": 62665,
+                "in": "5b56215c-a720-4e54-b3d8-de60f52d2d28",
+                "out": "5b56215c-a720-4e54-b3d8-de60f52d2d28",                
+                "enabled": true,
+                "created": "2017-01-01 00:00:00",
+                "updated": "2017-01-01 00:00:00"
+            }
+        }
+
