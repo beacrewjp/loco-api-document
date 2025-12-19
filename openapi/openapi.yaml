@@ -1,0 +1,1677 @@
+openapi: 3.0.3
+info:
+  title: Loco API Documentation
+  description: |
+    Loco API provides endpoints for retrieving log data and master/configuration data.
+
+    ## Authentication
+    Authentication to the API is done through the use of an API secret. Each user has 1 API secret, and this key is sent in an HTTP header with every request requiring authentication.
+
+    The API secret token is available on your account page and should be sent as an HTTP Header named **Authorization**.
+
+    Example:
+    ```
+    Authorization: mkjaqgrdbgvy2i25fq4iy7qey3q8v2cg
+    ```
+
+    ## HTTP Response Code
+
+    | Code | Message               | Payload                     |
+    |-----:|-----------------------|-----------------------------|
+    |  200 | OK                    | Response data               |
+    |  400 | Request invalid       | Validation error messages   |
+    |  401 | Secret invalid        | []                          |
+    |  500 | Internal server error | []                          |
+  version: v2
+servers:
+  - url: https://api.bc-loco.jp/api
+tags:
+  - name: Log APIs
+    description: Retrieve log data (beacon, battery, event, region, device)
+  - name: Master APIs
+    description: Retrieve master/configuration data (beacons, clusters, regions, actions)
+security:
+  - APIKeyAuth: []
+components:
+  securitySchemes:
+    APIKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API secret token available on your account page
+  schemas:
+    # Common schemas
+    CommonParts:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP status code
+          example: 200
+        message:
+          type: string
+          description: A message related to the response
+          example: "OK"
+        payload:
+          type: object
+          description: The acquired value is stored as an array in **data**.
+          properties:
+            total:
+              type: integer
+              example: 1000
+            per_page:
+              type: integer
+              example: 100
+            current_page:
+              type: integer
+              example: 1
+            last_page:
+              type: integer
+              example: 10
+            next_page_url:
+              type: string
+              nullable: true
+              example: "https://api.bc-loco.jp/api/beacon_logs?page=2"
+            prev_page_url:
+              type: string
+              nullable: true
+              example: null
+            from:
+              type: integer
+              example: 1
+            to:
+              type: integer
+              example: 100
+    CommonPartsById:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP status code
+          example: 200
+        message:
+          type: string
+          description: A message related to the response
+          example: "OK"
+    # Log schemas
+    BeaconLog:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "acf4cc71-e16b-4c74-970b-efb4dd049cdc"
+                  bundle_id:
+                    type: string
+                    example: "jp.beacrew.sample"
+                  device_id:
+                    type: string
+                    example: "a836a50a-3214-4fd3-b6f9-08ef53176ada"
+                  beacon_id:
+                    type: string
+                    example: "9db64ef9-9ce1-4b86-af8c-95ef88dfa68d"
+                  rssi:
+                    type: integer
+                    example: -66
+                  detected:
+                    type: string
+                    format: date-time
+                    example: "2025-08-25 13:10:00"
+                  arrived:
+                    type: string
+                    format: date-time
+                    example: "2025-08-25 13:10:01"
+                  latitude:
+                    type: integer
+                    description: Output if defined when deploying to a cluster
+                    example: 35.6391312480256
+                  longitude:
+                    type: integer
+                    description: Output if defined when deploying to a cluster
+                    example: 139.70391733542957
+                  abs_height:
+                    type: integer
+                    description: Output if defined when deploying to a cluster
+                    example: 12.0
+    BatteryLog:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "acf4cc71-e16b-4c74-970b-efb4dd049cdc"
+                  bundle_id:
+                    type: string
+                    example: "jp.beacrew.sample"
+                  device_id:
+                    type: string
+                    example: "a836a50a-3214-4fd3-b6f9-08ef53176ada"
+                  beacon_id:
+                    type: string
+                    example: "9db64ef9-9ce1-4b86-af8c-95ef88dfa68d"
+                  battery:
+                    type: integer
+                    example: 100
+                  detected:
+                    type: string
+                    format: date-time
+                    example: "2025-08-25 13:10:00"
+                  arrived:
+                    type: string
+                    format: date-time
+                    example: "2025-08-25 13:10:01"
+    EventLog:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "acf4cc71-e16b-4c74-970b-efb4dd049cdc"
+                  bundle_id:
+                    type: string
+                    example: "jp.beacrew.sample"
+                  device_id:
+                    type: string
+                    example: "a836a50a-3214-4fd3-b6f9-08ef53176ada"
+                  event_key:
+                    type: string
+                    example: "ek"
+                  event_value:
+                    type: string
+                    example: "Event Key"
+                  detected:
+                    type: string
+                    format: date-time
+                    example: "2025-08-25 13:10:00"
+                  arrived:
+                    type: string
+                    format: date-time
+                    example: "2025-08-25 13:10:01"
+    RegionLog:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "acf4cc71-e16b-4c74-970b-efb4dd049cdc"
+                  bundle_id:
+                    type: string
+                    example: "jp.beacrew.sample"
+                  device_id:
+                    type: string
+                    example: "a836a50a-3214-4fd3-b6f9-08ef53176ada"
+                  region_id:
+                    type: string
+                    example: "aef90796-b2c5-4600-a86f-301a4b19be5c"
+                  in_out:
+                    type: boolean
+                    example: true
+                  detected:
+                    type: string
+                    format: date-time
+                    example: "2025-08-25 13:10:00"
+                  arrived:
+                    type: string
+                    format: date-time
+                    example: "2025-08-25 13:10:01"
+    DeviceLog:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "acf4cc71-e16b-4c74-970b-efb4dd049cdc"
+                  bundle_id:
+                    type: string
+                    example: "jp.beacrew.sample"
+                  device_id:
+                    type: string
+                    example: "a836a50a-3214-4fd3-b6f9-08ef53176ada"
+                  os_type:
+                    type: string
+                    example: "iOS"
+                  os_version:
+                    type: string
+                    example: "11.2.6"
+                  sdk_version:
+                    type: string
+                    example: "1.0.0"
+                  model:
+                    type: string
+                    example: "iPhone 10,3"
+                  location:
+                    type: boolean
+                    example: true
+                  bluetooth:
+                    type: boolean
+                    example: true
+                  detected:
+                    type: string
+                    format: date-time
+                    example: "2025-08-25 13:10:00"
+                  arrived:
+                    type: string
+                    format: date-time
+                    example: "2025-08-25 13:10:01"
+    BeaconLogResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonParts'
+        - $ref: '#/components/schemas/BeaconLog'
+    BatteryLogResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonParts'
+        - $ref: '#/components/schemas/BatteryLog'
+    EventLogResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonParts'
+        - $ref: '#/components/schemas/EventLog'
+    RegionLogResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonParts'
+        - $ref: '#/components/schemas/RegionLog'
+    DeviceLogResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonParts'
+        - $ref: '#/components/schemas/DeviceLog'
+    # Master schemas
+    Beacon:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "b80e08cd-091f-44a7-9ada-d6bc9899a0cf"
+        name:
+          type: string
+          example: "demoBeacon"
+        local_name:
+          type: string
+          example: "demoBeacon"
+        uuid:
+          type: string
+          example: "b80e08cd-091f-44a7-9ada-d6bc9899a0cf"
+        major:
+          type: integer
+          example: 62665
+        minor:
+          type: integer
+          example: 62665
+        action_id:
+          type: string
+          example: "b2ea762c-ffda-43f7-b0cd-c0fa9a0c7f6e"
+        tx_power:
+          type: integer
+          example: -77
+        battery:
+          type: integer
+          example: 100
+        module_id:
+          type: string
+          example: "Xkrv"
+        manufacturer:
+          type: string
+          example: "Kontakt"
+        model:
+          type: string
+          example: "Standard"
+        note:
+          type: string
+          example: "demo"
+        x:
+          type: integer
+          example: 339
+        y:
+          type: integer
+          example: 146
+        h:
+          type: integer
+          example: 1
+        enabled:
+          type: boolean
+          example: true
+        created:
+          type: string
+          example: "2017-01-01 00:00:00"
+        updated:
+          type: string
+          example: "2017-01-01 00:00:00"
+    Beacons:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Beacon'
+    BeaconsResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonParts'
+        - $ref: '#/components/schemas/Beacons'
+    BeaconResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonPartsById'
+        - properties:
+            payload:
+              $ref: '#/components/schemas/Beacon'
+    Cluster:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "7028fb82-b551-4828-a90e-7db58f2f6902"
+        name:
+          type: string
+          example: "demoCluster"
+        image:
+          type: string
+          nullable: true
+          example: null
+        cm_per_pixel:
+          type: number
+          format: float
+          example: 3.56
+        att_coef:
+          type: number
+          format: float
+          example: 2.0
+        tag:
+          type: string
+          example: "Facility"
+        parent_id:
+          type: string
+          nullable: true
+          example: null
+        beacons:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "acafd1d5-9322-4a37-873a-f1952f939eca"
+        enabled:
+          type: boolean
+          example: true
+        created:
+          type: string
+          example: "2017-01-01 00:00:00"
+        updated:
+          type: string
+          example: "2017-01-01 00:00:00"
+    Clusters:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Cluster'
+    ClustersResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonParts'
+        - $ref: '#/components/schemas/Clusters'
+    ClusterResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonPartsById'
+        - properties:
+            payload:
+              $ref: '#/components/schemas/Cluster'
+    Region:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "acafd1d5-9322-4a37-873a-f1952f939eca"
+        name:
+          type: string
+          example: "demoRegion"
+        type:
+          type: string
+          enum: ["Beacon", "Geofence"]
+          example: "Beacon"
+        uuid:
+          type: string
+          example: "b80e08cd-091f-44a7-9ada-d6bc9899a0cf"
+        major:
+          type: integer
+          example: 62665
+        minor:
+          type: integer
+          example: 62665
+        latitude:
+          type: number
+          format: float
+          example: 35.658095
+        longitude:
+          type: number
+          format: float
+          example: 139.701127
+        radius:
+          type: number
+          format: float
+          example: 2000
+        in:
+          type: string
+          example: "5b56215c-a720-4e54-b3d8-de60f52d2d28"
+        out:
+          type: string
+          example: "5b56215c-a720-4e54-b3d8-de60f52d2d28"
+        enabled:
+          type: boolean
+          example: true
+        created:
+          type: string
+          example: "2017-01-01 00:00:00"
+        updated:
+          type: string
+          example: "2017-01-01 00:00:00"
+    Regions:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Region'
+    RegionsResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonParts'
+        - $ref: '#/components/schemas/Regions'
+    RegionResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonPartsById'
+        - properties:
+            payload:
+              $ref: '#/components/schemas/Region'
+    Action:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "acafd1d5-9322-4a37-873a-f1952f939eca"
+        name:
+          type: string
+          example: "demoAction"
+        interval:
+          type: integer
+          example: 60
+        uri:
+          type: string
+          example: "https://www.demoaction.com"
+        params:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                example: "key01"
+              val:
+                type: string
+                example: "val01"
+        enabled:
+          type: boolean
+          example: true
+        created:
+          type: string
+          example: "2017-01-01 00:00:00"
+        updated:
+          type: string
+          example: "2017-01-01 00:00:00"
+    Actions:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Action'
+    ActionsResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonParts'
+        - $ref: '#/components/schemas/Actions'
+    ActionResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonPartsById'
+        - properties:
+            payload:
+              $ref: '#/components/schemas/Action'
+paths:
+  # Log APIs
+  /beacon_logs:
+    get:
+      tags:
+        - Log APIs
+      summary: Get Beacon Logs
+      description: Get beacon logs
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 100
+          description: Set a custom page size up to 10000
+          example: 1000
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Specify pages
+          example: 1
+        - in: query
+          name: suffix
+          schema:
+            type: string
+          description: 'Search for logs by the suffix of bundle id each environments. *<code>all</code> returns the log of all environments'
+          example: ".development"
+        - in: query
+          name: device_id
+          schema:
+            type: array
+            items:
+              type: string
+          description: Search for logs by the field
+          example: "e996cb50-ffb1-4f5c-ade5-d111dcaba4b0"
+        - in: query
+          name: beacon_id
+          schema:
+            type: string
+          description: Search for logs by the field
+          example: "a004860f-767c-4388-b9d8-76b321a323e7"
+        - in: query
+          name: rssi_gt
+          schema:
+            type: integer
+          description: Greater than or equal to **rssi**
+          example: -255
+        - in: query
+          name: rssi_lt
+          schema:
+            type: integer
+          description: Less than or equal to **rssi**
+          example: 0
+        - in: query
+          name: detected_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **detected**
+          example: "2025-08-25 00:00:00"
+        - in: query
+          name: detected_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **detected**
+          example: "2025-08-25 23:59:59"
+        - in: query
+          name: arrived_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **arrived**
+          example: "2025-08-25 00:00:00"
+        - in: query
+          name: arrived_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **arrived**
+          example: "2025-08-25 23:59:59"
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: "desc"
+            enum: ["asc", "desc"]
+          description: Sort in ascending order or descending order by **detected**
+          example: "desc"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeaconLogResponse'
+  /battery_logs:
+    get:
+      tags:
+        - Log APIs
+      summary: Get Battery Logs
+      description: Get battery logs
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 100
+          description: Set a custom page size up to 10000
+          example: 1000
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Specify pages
+          example: 1
+        - in: query
+          name: suffix
+          schema:
+            type: string
+          description: 'Search for logs by the suffix of bundle id each environments. *<code>all</code> returns the log of all environments'
+          example: ".development"
+        - in: query
+          name: device_id
+          schema:
+            type: array
+            items:
+              type: string
+          description: Search for logs by the field
+          example: "e996cb50-ffb1-4f5c-ade5-d111dcaba4b0"
+        - in: query
+          name: beacon_id
+          schema:
+            type: string
+          description: Search for logs by the field
+          example: "a004860f-767c-4388-b9d8-76b321a323e7"
+        - in: query
+          name: battery_gt
+          schema:
+            type: integer
+          description: Greater than or equal to **battery**
+          example: 0
+        - in: query
+          name: battery_lt
+          schema:
+            type: integer
+          description: Less than or equal to **battery**
+          example: 100
+        - in: query
+          name: detected_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **detected**
+          example: "2025-08-25 00:00:00"
+        - in: query
+          name: detected_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **detected**
+          example: "2025-08-25 23:59:59"
+        - in: query
+          name: arrived_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **arrived**
+          example: "2025-08-25 00:00:00"
+        - in: query
+          name: arrived_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **arrived**
+          example: "2025-08-25 23:59:59"
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: "desc"
+            enum: ["asc", "desc"]
+          description: Sort in ascending order or descending order by **detected**
+          example: "desc"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatteryLogResponse'
+  /event_logs:
+    get:
+      tags:
+        - Log APIs
+      summary: Get Event Logs
+      description: Get event logs
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 100
+          description: Set a custom page size up to 10000
+          example: 1000
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Specify pages
+          example: 1
+        - in: query
+          name: suffix
+          schema:
+            type: string
+          description: 'Search for logs by the suffix of bundle id each environments. *<code>all</code> returns the log of all environments'
+          example: ".development"
+        - in: query
+          name: device_id
+          schema:
+            type: array
+            items:
+              type: string
+          description: Search for logs by the field
+          example: "e996cb50-ffb1-4f5c-ade5-d111dcaba4b0"
+        - in: query
+          name: event_key
+          schema:
+            type: string
+          description: Search for logs by the field (Partial match)
+          example: "Key"
+        - in: query
+          name: event_value
+          schema:
+            type: string
+          description: Search for logs by the field (Partial match)
+          example: "Value"
+        - in: query
+          name: detected_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **detected**
+          example: "2025-08-25 00:00:00"
+        - in: query
+          name: detected_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **detected**
+          example: "2025-08-25 23:59:59"
+        - in: query
+          name: arrived_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **arrived**
+          example: "2025-08-25 00:00:00"
+        - in: query
+          name: arrived_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **arrived**
+          example: "2025-08-25 23:59:59"
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: "desc"
+            enum: ["asc", "desc"]
+          description: Sort in ascending order or descending order by **detected**
+          example: "desc"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventLogResponse'
+  /region_logs:
+    get:
+      tags:
+        - Log APIs
+      summary: Get Region Logs
+      description: Get region logs
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 100
+          description: Set a custom page size up to 10000
+          example: 1000
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Specify pages
+          example: 1
+        - in: query
+          name: suffix
+          schema:
+            type: string
+          description: 'Search for logs by the suffix of bundle id each environments. *<code>all</code> returns the log of all environments'
+          example: ".development"
+        - in: query
+          name: device_id
+          schema:
+            type: array
+            items:
+              type: string
+          description: Search for logs by the field
+          example: "e996cb50-ffb1-4f5c-ade5-d111dcaba4b0"
+        - in: query
+          name: region_id
+          schema:
+            type: string
+          description: Search for logs by the field
+          example: "0df3ccce-c2ba-44f8-b252-f4775bbdc4d2"
+        - in: query
+          name: in_out
+          schema:
+            type: boolean
+          description: 'true: Region in / false: Region out'
+          example: true
+        - in: query
+          name: detected_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **detected**
+          example: "2025-08-25 00:00:00"
+        - in: query
+          name: detected_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **detected**
+          example: "2025-08-25 23:59:59"
+        - in: query
+          name: arrived_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **arrived**
+          example: "2025-08-25 00:00:00"
+        - in: query
+          name: arrived_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **arrived**
+          example: "2025-08-25 23:59:59"
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: "desc"
+            enum: ["asc", "desc"]
+          description: Sort in ascending order or descending order by **detected**
+          example: "desc"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionLogResponse'
+  /device_logs:
+    get:
+      tags:
+        - Log APIs
+      summary: Get Device Logs
+      description: Get device logs
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 100
+          description: Set a custom page size up to 10000
+          example: 1000
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Specify pages
+          example: 1
+        - in: query
+          name: suffix
+          schema:
+            type: string
+          description: 'Search for logs by the suffix of bundle id each environments. *<code>all</code> is to get the log of all environments'
+          example: ".development"
+        - in: query
+          name: device_id
+          schema:
+            type: array
+            items:
+              type: string
+          description: Search for logs by the field
+          example: "e996cb50-ffb1-4f5c-ade5-d111dcaba4b0"
+        - in: query
+          name: os_type
+          schema:
+            type: string
+          description: Search for logs by the field (Partial match)
+          example: "iOS"
+        - in: query
+          name: os_version
+          schema:
+            type: string
+          description: Search for logs by the field (Partial match)
+          example: "11."
+        - in: query
+          name: sdk_version
+          schema:
+            type: string
+          description: Search for logs by the field (Partial match)
+          example: "2."
+        - in: query
+          name: model
+          schema:
+            type: string
+          description: Search for logs by the field (Partial match)
+          example: "iPhone"
+        - in: query
+          name: bluetooth
+          schema:
+            type: boolean
+          description: 'true: ON false: OFF'
+          example: true
+        - in: query
+          name: location
+          schema:
+            type: boolean
+          description: 'true: ON false: OFF'
+          example: true
+        - in: query
+          name: detected_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **detected**
+          example: "2025-08-25 00:00:00"
+        - in: query
+          name: detected_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **detected**
+          example: "2025-08-25 23:59:59"
+        - in: query
+          name: arrived_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **arrived**
+          example: "2025-08-25 00:00:00"
+        - in: query
+          name: arrived_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **arrived**
+          example: "2025-08-25 23:59:59"
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: "desc"
+            enum: ["asc", "desc"]
+          description: Sort in ascending order or descending order by **detected**
+          example: "desc"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceLogResponse'
+  # Master APIs
+  /beacons:
+    get:
+      tags:
+        - Master APIs
+      summary: Get Beacons
+      description: Get Beacons
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 100
+          description: Set a custom page size up to 1000
+          example: 1000
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Specify pages
+          example: 1
+        - in: query
+          name: id
+          schema:
+            type: array
+            items:
+              type: string
+          description: Search for beacons by the field
+          example: "e996cb50-ffb1-4f5c-ade5-d111dcaba4b0"
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Beacon name (Partial match)
+          example: "demoBeacon"
+        - in: query
+          name: local_name
+          schema:
+            type: string
+          description: Local name (Partial match)
+          example: "demoBeacon"
+        - in: query
+          name: uuid
+          schema:
+            type: string
+          description: uuid
+          example: "b80e08cd-091f-44a7-9ada-d6bc9899a0cf"
+        - in: query
+          name: major
+          schema:
+            type: integer
+          description: Major
+          example: 62665
+        - in: query
+          name: minor
+          schema:
+            type: integer
+          description: Minor
+          example: 62665
+        - in: query
+          name: action_id
+          schema:
+            type: string
+          description: Action id
+          example: "acafd1d5-9322-4a37-873a-f1952f939eca"
+        - in: query
+          name: tx_power
+          schema:
+            type: integer
+          description: TxPower
+          example: -77
+        - in: query
+          name: battery_gt
+          schema:
+            type: integer
+          description: Greater than or equal to **battery**
+          example: 30
+        - in: query
+          name: battery_lt
+          schema:
+            type: integer
+          description: Less than or equal to **battery**
+          example: 70
+        - in: query
+          name: module_id
+          schema:
+            type: string
+          description: Module id
+          example: "Xkrv"
+        - in: query
+          name: manufacturer
+          schema:
+            type: string
+          description: Manufacturer
+          example: "Kontakt"
+        - in: query
+          name: model
+          schema:
+            type: string
+          description: Model
+          example: "Standard"
+        - in: query
+          name: note
+          schema:
+            type: string
+          description: Note (Partial match)
+          example: "demo"
+        - in: query
+          name: x
+          schema:
+            type: integer
+          description: X position
+          example: 339
+        - in: query
+          name: y
+          schema:
+            type: integer
+          description: Y position
+          example: 146
+        - in: query
+          name: h
+          schema:
+            type: integer
+          description: Height
+          example: 1
+        - in: query
+          name: enabled
+          schema:
+            type: boolean
+          description: Status
+          example: true
+        - in: query
+          name: created_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **created**
+          example: "2018-03-20 00:00:00"
+        - in: query
+          name: created_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **created**
+          example: "2018-03-25 00:00:00"
+        - in: query
+          name: updated_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **updated**
+          example: "2018-03-20 00:00:00"
+        - in: query
+          name: updated_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **updated**
+          example: "2018-03-25 00:00:00"
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: "desc"
+            enum: ["asc", "desc"]
+          description: Sort in ascending order or descending order by **created**
+          example: "desc"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeaconsResponse'
+  /beacons/{id}:
+    get:
+      tags:
+        - Master APIs
+      summary: Get Beacon by id
+      description: Get beacon info by specified id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Beacon ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeaconResponse'
+  /clusters:
+    get:
+      tags:
+        - Master APIs
+      summary: Get Clusters
+      description: Get Clusters
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 100
+          description: Set a custom page size up to 1000
+          example: 1000
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Specify pages
+          example: 1
+        - in: query
+          name: id
+          schema:
+            type: array
+            items:
+              type: string
+          description: Search for clusters by the field
+          example: "7028fb82-b551-4828-a90e-7db58f2f6902"
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Cluster name (Partial match)
+          example: "demoCluster"
+        - in: query
+          name: parent_id
+          schema:
+            type: string
+          description: Parent Cluster id
+          example: "b80e08cd-091f-44a7-9ada-d6bc9899a0cf"
+        - in: query
+          name: tag
+          schema:
+            type: string
+          description: Tag
+          example: "Facility"
+        - in: query
+          name: image
+          schema:
+            type: string
+          description: Image file URL
+          example: "https://aaa.bbb.ccc/demoMap.jpg"
+        - in: query
+          name: cm_per_pixel
+          schema:
+            type: number
+            format: float
+          description: cm per pixel
+          example: 3.56
+        - in: query
+          name: att_coef
+          schema:
+            type: number
+            format: float
+          description: att coef
+          example: 2.0
+        - in: query
+          name: enabled
+          schema:
+            type: boolean
+          description: Status
+          example: true
+        - in: query
+          name: created_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **created**
+          example: "2018-03-20 00:00:00"
+        - in: query
+          name: created_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **created**
+          example: "2018-03-25 00:00:00"
+        - in: query
+          name: updated_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **updated**
+          example: "2018-03-20 00:00:00"
+        - in: query
+          name: updated_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **updated**
+          example: "2018-03-25 00:00:00"
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: "desc"
+            enum: ["asc", "desc"]
+          description: Sort in ascending order or descending order by **created**
+          example: "desc"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClustersResponse'
+  /clusters/{id}:
+    get:
+      tags:
+        - Master APIs
+      summary: Get Cluster by id
+      description: Get Cluster by specified id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Cluster ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClusterResponse'
+  /regions:
+    get:
+      tags:
+        - Master APIs
+      summary: Get Regions
+      description: Get Regions
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 100
+          description: Set a custom page size up to 1000
+          example: 1000
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Specify pages
+          example: 1
+        - in: query
+          name: id
+          schema:
+            type: array
+            items:
+              type: string
+          description: Search for regions by the field
+          example: "e996cb50-ffb1-4f5c-ade5-d111dcaba4b0"
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Region name (Partial match)
+          example: "demoRegion"
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: ["Beacon", "Geofence"]
+          description: 'Type ("Beacon" or "Geofence")'
+          example: "Beacon"
+        - in: query
+          name: uuid
+          schema:
+            type: string
+          description: uuid
+          example: "b80e08cd-091f-44a7-9ada-d6bc9899a0cf"
+        - in: query
+          name: major
+          schema:
+            type: integer
+          description: Major
+          example: 62665
+        - in: query
+          name: minor
+          schema:
+            type: integer
+          description: Minor
+          example: 62665
+        - in: query
+          name: latitude
+          schema:
+            type: number
+            format: float
+          description: Latitude
+          example: 35.658095
+        - in: query
+          name: longitude
+          schema:
+            type: number
+            format: float
+          description: Longitude
+          example: 139.701127
+        - in: query
+          name: radius
+          schema:
+            type: number
+            format: float
+          description: Radius
+          example: 2000
+        - in: query
+          name: in
+          schema:
+            type: string
+          description: Region in action id
+          example: "5b56215c-a720-4e54-b3d8-de60f52d2d28"
+        - in: query
+          name: out
+          schema:
+            type: string
+          description: Region out action id
+          example: "5b56215c-a720-4e54-b3d8-de60f52d2d28"
+        - in: query
+          name: enabled
+          schema:
+            type: boolean
+          description: Status
+          example: true
+        - in: query
+          name: created_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **created**
+          example: "2018-03-20 00:00:00"
+        - in: query
+          name: created_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **created**
+          example: "2018-03-25 00:00:00"
+        - in: query
+          name: updated_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **updated**
+          example: "2018-03-20 00:00:00"
+        - in: query
+          name: updated_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **updated**
+          example: "2018-03-25 00:00:00"
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: "desc"
+            enum: ["asc", "desc"]
+          description: Sort in ascending order or descending order by **created**
+          example: "desc"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionsResponse'
+  /regions/{id}:
+    get:
+      tags:
+        - Master APIs
+      summary: Get Region by id
+      description: Get Region by specified id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Region ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionResponse'
+  /actions:
+    get:
+      tags:
+        - Master APIs
+      summary: Get Actions
+      description: Get actions
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 100
+          description: Set a custom page size up to 1000
+          example: 1000
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Specify pages
+          example: 1
+        - in: query
+          name: id
+          schema:
+            type: array
+            items:
+              type: string
+          description: Search for actions by the field
+          example: "e996cb50-ffb1-4f5c-ade5-d111dcaba4b0"
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Action name (Partial match)
+          example: "demoAction"
+        - in: query
+          name: interval
+          schema:
+            type: integer
+          description: Action interval (Partial match)
+          example: 60
+        - in: query
+          name: uri
+          schema:
+            type: string
+          description: URI (Partial match)
+          example: "beacrew.jp"
+        - in: query
+          name: enabled
+          schema:
+            type: boolean
+          description: Status
+          example: true
+        - in: query
+          name: created_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **created**
+          example: "2018-03-20 00:00:00"
+        - in: query
+          name: created_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **created**
+          example: "2018-03-25 00:00:00"
+        - in: query
+          name: updated_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **updated**
+          example: "2018-03-20 00:00:00"
+        - in: query
+          name: updated_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **updated**
+          example: "2018-03-25 00:00:00"
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: "desc"
+            enum: ["asc", "desc"]
+          description: Sort in ascending order or descending order by **created**
+          example: "desc"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionsResponse'
+  /actions/{id}:
+    get:
+      tags:
+        - Master APIs
+      summary: Get Action by id
+      description: Get Action by specified id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Action ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionResponse'
