@@ -1,0 +1,4 @@
+theme:
+  openapi:
+    disableSearch: true
+    hideDownloadButton: true
