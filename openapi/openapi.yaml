@@ -584,6 +584,9 @@ components:
         id:
           type: string
           example: "acf4cc71-e16b-4c74-970b-efb4dd049cdc"
+        device_id:
+          type: string
+          example: "a836a50a-3214-4fd3-b6f9-08ef53176ada"
         manufacturer_id:
           type: string
           example: "MFR-001234"
@@ -593,56 +596,34 @@ components:
         name:
           type: string
           example: "demoDevice"
-        device_id:
-          type: string
-          example: "a836a50a-3214-4fd3-b6f9-08ef53176ada"
         mounted:
           type: boolean
           example: true
-        owner_id:
-          type: string
-          example: "7028fb82-b551-4828-a90e-7db58f2f6902"
-        owner_name:
-          type: string
-          example: "Demo Client"
-        app_id:
-          type: string
-          nullable: true
-          example: "b2ea762c-ffda-43f7-b0cd-c0fa9a0c7f6e"
-        cluster_id:
-          type: string
-          nullable: true
-          example: "7028fb82-b551-4828-a90e-7db58f2f6902"
-        x:
-          type: string
-          nullable: true
-          example: "100"
-        y:
-          type: string
-          nullable: true
-          example: "200"
-        z:
-          type: string
-          nullable: true
-          example: "1"
         note:
           type: string
           nullable: true
           example: "demo"
-        status:
-          type: boolean
-          example: true
-        shared_id:
-          type: array
-          items:
-            type: string
-          example: ["client-uuid-1", "client-uuid-2"]
+        x:
+          type: integer
+          nullable: true
+          example: 100
+        y:
+          type: integer
+          nullable: true
+          example: 200
+        z:
+          type: integer
+          nullable: true
+          example: 1
         created:
           type: string
           example: "2017-01-01 00:00:00"
         updated:
           type: string
           example: "2017-01-01 00:00:00"
+        enabled:
+          type: boolean
+          example: true
     Devices:
       type: object
       properties:
@@ -657,12 +638,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/CommonParts'
         - $ref: '#/components/schemas/Devices'
-    DeviceResponse:
-      allOf:
-        - $ref: '#/components/schemas/CommonPartsById'
-        - properties:
-            payload:
-              $ref: '#/components/schemas/Device'
 paths:
   # Log APIs
   /beacon_logs:
@@ -1814,12 +1789,6 @@ paths:
           description: Device ID (UUID)
           example: "a836a50a-3214-4fd3-b6f9-08ef53176ada"
         - in: query
-          name: cluster_id
-          schema:
-            type: string
-          description: Cluster ID
-          example: "7028fb82-b551-4828-a90e-7db58f2f6902"
-        - in: query
           name: mounted
           schema:
             type: string
@@ -1851,7 +1820,7 @@ paths:
           description: Note (Partial match)
           example: "demo"
         - in: query
-          name: status
+          name: enabled
           schema:
             type: boolean
           description: Status
@@ -1899,23 +1868,3 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DevicesResponse'
-  /devices/{id}:
-    get:
-      tags:
-        - Master APIs
-      summary: Get Device by id
-      description: Get Device by specified id
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-          description: Device ID
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DeviceResponse'
