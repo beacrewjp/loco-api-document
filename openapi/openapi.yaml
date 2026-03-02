@@ -1791,10 +1791,9 @@ paths:
         - in: query
           name: mounted
           schema:
-            type: string
-            enum: ["true", "false", "all"]
-          description: 'Filter by mounted status. "all" returns both mounted and unmounted devices'
-          example: "true"
+            type: boolean
+          description: Filter by mounted status. If not specified, both mounted and unmounted devices are returned.
+          example: true
         - in: query
           name: x
           schema:
