@@ -29,7 +29,7 @@ tags:
   - name: Log APIs
     description: Retrieve log data (beacon, battery, event, region, device)
   - name: Master APIs
-    description: Retrieve master/configuration data (beacons, clusters, regions, actions)
+    description: Retrieve master/configuration data (beacons, clusters, regions, actions, devices)
 security:
   - APIKeyAuth: []
 components:
@@ -578,6 +578,66 @@ components:
         - properties:
             payload:
               $ref: '#/components/schemas/Action'
+    Device:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "acf4cc71-e16b-4c74-970b-efb4dd049cdc"
+        device_id:
+          type: string
+          example: "a836a50a-3214-4fd3-b6f9-08ef53176ada"
+        manufacturer_id:
+          type: string
+          example: "MFR-001234"
+        manufacturer:
+          type: string
+          example: "Apple"
+        name:
+          type: string
+          example: "demoDevice"
+        mounted:
+          type: boolean
+          example: true
+        note:
+          type: string
+          nullable: true
+          example: "demo"
+        x:
+          type: integer
+          nullable: true
+          example: 100
+        y:
+          type: integer
+          nullable: true
+          example: 200
+        z:
+          type: integer
+          nullable: true
+          example: 1
+        created:
+          type: string
+          example: "2017-01-01 00:00:00"
+        updated:
+          type: string
+          example: "2017-01-01 00:00:00"
+        enabled:
+          type: boolean
+          example: true
+    Devices:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Device'
+    DevicesResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonParts'
+        - $ref: '#/components/schemas/Devices'
 paths:
   # Log APIs
   /beacon_logs:
@@ -1675,3 +1735,135 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ActionResponse'
+  /devices:
+    get:
+      tags:
+        - Master APIs
+      summary: Get Devices
+      description: Get Devices
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 100
+          description: Set a custom page size up to 1000
+          example: 1000
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Specify pages
+          example: 1
+        - in: query
+          name: id
+          schema:
+            type: array
+            items:
+              type: string
+          description: Search for devices by the field
+          example: "e996cb50-ffb1-4f5c-ade5-d111dcaba4b0"
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Device name (Partial match)
+          example: "demoDevice"
+        - in: query
+          name: manufacturer_id
+          schema:
+            type: string
+          description: Manufacturer ID
+          example: "MFR-001234"
+        - in: query
+          name: manufacturer
+          schema:
+            type: string
+          description: Manufacturer name
+          example: "Apple"
+        - in: query
+          name: device_id
+          schema:
+            type: string
+          description: Device ID (UUID)
+          example: "a836a50a-3214-4fd3-b6f9-08ef53176ada"
+        - in: query
+          name: mounted
+          schema:
+            type: boolean
+          description: Filter by mounted status. If not specified, both mounted and unmounted devices are returned.
+          example: true
+        - in: query
+          name: x
+          schema:
+            type: string
+          description: X position
+          example: "100"
+        - in: query
+          name: y
+          schema:
+            type: string
+          description: Y position
+          example: "200"
+        - in: query
+          name: z
+          schema:
+            type: string
+          description: Z position
+          example: "1"
+        - in: query
+          name: note
+          schema:
+            type: string
+          description: Note (Partial match)
+          example: "demo"
+        - in: query
+          name: enabled
+          schema:
+            type: boolean
+          description: Status
+          example: true
+        - in: query
+          name: created_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **created**
+          example: "2018-03-20 00:00:00"
+        - in: query
+          name: created_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **created**
+          example: "2018-03-25 00:00:00"
+        - in: query
+          name: updated_gt
+          schema:
+            type: string
+            format: date-time
+          description: Greater than or equal to **updated**
+          example: "2018-03-20 00:00:00"
+        - in: query
+          name: updated_lt
+          schema:
+            type: string
+            format: date-time
+          description: Less than or equal to **updated**
+          example: "2018-03-25 00:00:00"
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: "desc"
+            enum: ["asc", "desc"]
+          description: Sort in ascending order or descending order by **created**
+          example: "desc"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DevicesResponse'
