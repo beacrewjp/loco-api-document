@@ -318,9 +318,6 @@ components:
         name:
           type: string
           example: "demoBeacon"
-        local_name:
-          type: string
-          example: "demoBeacon"
         uuid:
           type: string
           example: "b80e08cd-091f-44a7-9ada-d6bc9899a0cf"
@@ -330,24 +327,24 @@ components:
         minor:
           type: integer
           example: 62665
-        action_id:
-          type: string
-          example: "b2ea762c-ffda-43f7-b0cd-c0fa9a0c7f6e"
         tx_power:
           type: integer
           example: -77
         battery:
           type: integer
           example: 100
+        local_name:
+          type: string
+          example: "demoBeacon"
         module_id:
           type: string
           example: "Xkrv"
-        manufacturer:
-          type: string
-          example: "Kontakt"
         model:
           type: string
           example: "Standard"
+        manufacturer:
+          type: string
+          example: "Kontakt"
         note:
           type: string
           example: "demo"
@@ -360,15 +357,27 @@ components:
         h:
           type: integer
           example: 1
-        enabled:
-          type: boolean
-          example: true
+        latitude:
+          type: number
+          example: 35.63912756254926
+        longitude:
+          type: number
+          example: 139.70395810062715
+        abs_height:
+          type: number
+          example: 12.5
+        action:
+          type: string
+          example: "b2ea762c-ffda-43f7-b0cd-c0fa9a0c7f6e"
         created:
           type: string
           example: "2017-01-01 00:00:00"
         updated:
           type: string
           example: "2017-01-01 00:00:00"
+        enabled:
+          type: boolean
+          example: true
     Beacons:
       type: object
       properties:
