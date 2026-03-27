@@ -128,18 +128,6 @@ components:
                     type: string
                     format: date-time
                     example: "2025-08-25 13:10:01"
-                  latitude:
-                    type: integer
-                    description: Output if defined when deploying to a cluster
-                    example: 35.6391312480256
-                  longitude:
-                    type: integer
-                    description: Output if defined when deploying to a cluster
-                    example: 139.70391733542957
-                  abs_height:
-                    type: integer
-                    description: Output if defined when deploying to a cluster
-                    example: 12.0
     BatteryLog:
       type: object
       properties:
